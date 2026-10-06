@@ -136,16 +136,19 @@ def noise_aware_rank(matrix, col_sigma):
     return int(np.sum(s > gd_threshold(*matrix.shape)))
 
 
-def signal_basis(matrix, col_sigma):
+def signal_basis(matrix, col_sigma, return_raw=False):
     """
     Orthonormal basis Q (n_rows x r) of the signal subspace, and the rank r.
     Q = top-r left singular vectors of the whitened matrix; Gram-Schmidt applied as a clean-up.
+    return_raw=True also returns the SVD vectors BEFORE Gram-Schmidt (for the before/after printout).
     """
     Mw = whiten(matrix, col_sigma)
     U, s, _ = np.linalg.svd(Mw, full_matrices=False)
     r = int(np.sum(s > gd_threshold(*matrix.shape)))
     if r == 0:
         raise ValueError("No singular value exceeds the noise threshold: no recoverable signal.")
+    if return_raw:
+        return gram_schmidt(U[:, :r]), r, U[:, :r]
     return gram_schmidt(U[:, :r]), r
 
 
@@ -209,11 +212,24 @@ def main():
     if n > 8:
         print(f"  ... {n - 8} more, all <= {s[8]:.3f}")
     print(f"\nEffective (signal) rank r = {r}   [legacy tests said {n}]")
+    print(f"Nullity = channels - rank = {n} - {r} = {n - r}   "
+          f"(independent directions that carry only noise)")
+    print("In plain words: divide each channel by its noise level, take the SVD, and keep only the\n"
+          "singular values that stand above the largest value pure noise could produce.")
 
     # ---- basis ----
-    Q, r = signal_basis(M, col_sigma)
+    Q, r, Q_raw = signal_basis(M, col_sigma, return_raw=True)
     dev = float(np.max(np.abs(Q.T @ Q - np.eye(r))))
-    print(f"\n3) ORTHONORMAL BASIS Q: shape {Q.shape}")
+    dev_raw = float(np.max(np.abs(Q_raw.T @ Q_raw - np.eye(r))))
+    change = float(np.max(np.abs(Q - Q_raw)))
+    flips = [int(np.sign(np.dot(Q[:, j], Q_raw[:, j]))) for j in range(r)]
+    print(f"\n3) GRAM-SCHMIDT ON THE r = {r} SVD VECTORS (before -> after)")
+    print(f"before: shape {Q_raw.shape}, max |Q^T Q - I| = {dev_raw:.2e}   (SVD vectors are already orthonormal)")
+    print(f"after : shape {Q.shape}, max |Q^T Q - I| = {dev:.2e}")
+    print(f"max |Q_after - Q_before| = {change:.2e}   sign of each column vs before: {flips}")
+    print(f"-> Gram-Schmidt changed the basis by {change:.1e}: effectively a no-op here, kept as a clean-up")
+    print(f"   and as the explicit Gram-Schmidt step of the pipeline (legacy v1 applied it to noisy columns).")
+    print(f"\n   ORTHONORMAL BASIS Q: shape {Q.shape}")
     print(f"max |Q^T Q - I| = {dev:.2e}")
     print(f"[validation, uses known model] sin(largest principal angle to span{{1,t,t^2}}) = "
           f"{principal_angle_sine(Q, data['time']):.4f}  (0 = perfect)")

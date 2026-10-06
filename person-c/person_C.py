@@ -176,6 +176,23 @@ def main():
         print(f"residual norm ||e|| = ||b - A x_hat|| = {r['residual_norm']:.5f}")
         print(f"max |A^T e| (should be ~0) = {np.max(np.abs(A.T @ r['residual'])):.2e}")
 
+    # ---- 2b) A's 3-point calibration vs C's least squares vs the true coefficients ----
+    a_file = os.path.join(HERE, "..", "person-a", "person_A_coefficients.csv")
+    if os.path.exists(a_file) and all(f"true_{a}" in data for a in "xyz"):
+        with open(a_file, newline="") as f:
+            a_coef = {row["axis"].lower(): [float(row["c0"]), float(row["c1"]), float(row["c2"])]
+                      for row in csv.DictReader(f)}
+        print("\n2b) COEFFICIENTS [c0, c1, c2]: A (3-point calibration) vs C (least squares) vs truth")
+        print("    A solves a 3x3 system from 3 noisy samples; C fits all points. Truth = fit of the hidden true path.")
+        for a in "xyz":
+            c_true, *_ = fit_least_squares(t, data[f"true_{a}"])
+            print(f"  {a.upper()}  A: {np.round(a_coef[a], 4)}   C: {np.round(res[a]['coeffs'], 4)}   "
+                  f"truth: {np.round(c_true, 4)}")
+            print(f"     max |coef error|   A: {np.max(np.abs(np.array(a_coef[a]) - c_true)):.4f}   "
+                  f"C: {np.max(np.abs(res[a]['coeffs'] - c_true)):.4f}")
+    else:
+        print("\n2b) (A's coefficients not found - run person-a/person_A.py to see the A vs C comparison)")
+
     # ---- 3) prediction ----
     t_future = np.linspace(t.max(), t.max() + T_EXTRAPOLATE, N_FUTURE)
     pred = {a: evaluate_poly(res[a]["coeffs"], t_future) for a in "xyz"}

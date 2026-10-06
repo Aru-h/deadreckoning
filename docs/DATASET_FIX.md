@@ -1,6 +1,6 @@
 # Dataset fix: why rank/projection were vacuous, and what changed
 
-Status: implemented on branch `fix/low-rank-dataset`. Applies to Persons A, B, C (D has a skeleton).
+Status: implemented and merged to `main`. Applies to Persons A, B, C; Person D's PCA stage is implemented on top of it.
 Per-person actions: [TEAM_CHANGES.md](TEAM_CHANGES.md). Full literature/experiment write-up:
 [research/low-rank-dataset-fix-report.md](research/low-rank-dataset-fix-report.md).
 
@@ -36,7 +36,7 @@ Not a bug in anyone's code. Two separate things:
 | **A** `person_A.py` | Builds the matrix from every measurement channel in the CSV (was a hard-coded 9). RREF/LU calibration on `gps_x/y/z` at t = 0, 5, 10 s is unchanged. Original kept in `person-a/legacy/`. |
 | **B** `person_B.py` | **Noise-aware rank + SVD basis** replaces the greedy "is this column independent at 1e-10" test. Divide each column by its noise σ → SVD → keep singular values above the **Gavish–Donoho threshold** → `Q` = top-r left singular vectors, then Gram-Schmidt as clean-up and `‖I − QᵀQ‖` check. Legacy functions are kept in the file and the script prints how they fail. |
 | **C** `person_C.py` | Maths unchanged: `p = Q(Qᵀx)`, quadratic `lstsq`, extrapolation, `Aᵀe = 0` check. Now projects each GPS receiver, **fuses** (averages) them, and prints an honest comparison table. Q must come from B's all-channel SVD (never IMU-only). |
-| **D** `person_D.py` | **Skeleton only** (inputs, task list, notes). Use the covariance of σ-whitened channels, not the correlation matrix. |
+| **D** `person_D.py` | PCA on the σ-whitened, centred channels: covariance (not correlation), `eigh`, top-k projection, comparison with C. |
 | Tooling | `run_pipeline.py` (A→B→C→D), `tools/monte_carlo_validation.py` (reproduces the numbers below). |
 
 ### Noise-aware rank in one paragraph
@@ -96,7 +96,7 @@ path averaged over x, y, z:
   gave 100 % detection in the research runs.
 * The Gram-Schmidt error-bound exponent for the *modified* variant is unresolved in the sources read
   (Moler: κ; one set of lecture notes: κ²). Check Björck (1967), Golub & Van Loan §5.2.8 or Higham before quoting it.
-* Person D's stage is a skeleton; the "two dominant eigenvalues" statement was checked on the whitened
+* The "two dominant eigenvalues" statement was checked on the whitened
   19-channel covariance only (seed 42: 23445, 22.2, then a bulk ≤ 1.8; the correlation matrix hides the second one).
 * Public datasets (INSANE, Zurich MAV, ALFA) were reviewed: real noise is also full rank, so they do not remove the
   need for a noise-aware rank. They could serve as a separate real-data demo; INSANE's page and any column layout were not read.

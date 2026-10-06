@@ -29,8 +29,8 @@ Background and numbers: [DATASET_FIX.md](DATASET_FIX.md). Everything below runs 
 * Never project onto an IMU-only Q (RMSE 0.84 in the Monte-Carlo run).
 * Viva: projection ≈ halves the error alone, but **projection + least squares ties least squares alone**; fusion of receivers is the real gain.
 
-## Person D — PCA (≈ +1–2 h, moderate; skeleton provided)
-* `person-d/person_D.py` is a **skeleton**: inputs + a TODO list + notes. The maths is yours to write.
+## Person D — PCA (implemented)
+* `person-d/person_D.py` is implemented (whiten + centre, covariance, `eigh`, diagonalization check, top-k, comparison with truth).
 * Use the **covariance of σ-whitened channels**, not the correlation matrix; expect **two** dominant eigenvalues (centering removes the constant).
 * Compare raw vs C's least-squares path vs PCA-filtered path against `true_*`, and compile the Concept → Purpose → Outcome report for all four stages.
 
@@ -39,5 +39,5 @@ Background and numbers: [DATASET_FIX.md](DATASET_FIX.md). Everything below runs 
 > finds nothing to remove, and C's projection leaves GPS unchanged (or destroys it if the basis is IMU-only).
 > Fix (on branch `fix/low-rank-dataset`, details in `docs/DATASET_FIX.md`): A's generator now makes redundant channels
 > (3 GPS receivers, barometer, velocity) with stronger curvature; B uses a noise-aware rank (divide by σ, SVD, Gavish–Donoho
-> threshold, Q = top singular vectors); C's code is unchanged; D has a skeleton. No CSV is stored — everyone runs
+> threshold, Q = top singular vectors); C's code is unchanged; D's PCA stage is implemented. No CSV is stored — everyone runs
 > `python run_pipeline.py --seed 42` and checks the dataset fingerprint matches.

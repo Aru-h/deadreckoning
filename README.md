@@ -44,7 +44,7 @@ python run_pipeline.py --seed random   # fresh draw; the seed is printed so it c
 python run_pipeline.py --n-rx 6        # 6 GPS receivers per axis instead of 3
 python tools/monte_carlo_validation.py # 200-seed validation of the numbers in docs/DATASET_FIX.md
 ```
-It runs A → B → C → D in order (D is still a skeleton and says so). Generated files (`*.csv`, `*.png`, `person_*_output.txt`)
+It runs A → B → C → D in order (D does PCA / eigen-analysis). Generated files (`*.csv`, `*.png`, `person_*_output.txt`)
 appear next to each script and are git-ignored.
 
 **What a good run looks like:** `Seed: 42`, `Dataset fingerprint: 6ef86ec9fd71` (seed 42, 3 receivers — must match across laptops),
@@ -72,7 +72,7 @@ docs/           Overview, scope, DATASET_FIX.md (why/what changed), TEAM_CHANGES
 person-a/       Data generator + matrix representation + RREF/LU        (generate_dataset.py, person_A.py)
 person-b/       Noise-aware rank, basis, Gram-Schmidt                     (person_B.py)
 person-c/       Projection + least squares + prediction                   (person_C.py)
-person-d/       PCA / eigen-analysis + report                             (person_D.py — SKELETON)
+person-d/       PCA / eigen-analysis + report                             (person_D.py)
 tools/          Monte-Carlo validation
 run_pipeline.py Runs A → B → C → D
 ```
@@ -84,7 +84,7 @@ Each stage reads the previous stage's files and prints what it did; generated CS
 | A — data, RREF, LU | working (v2 dataset; v1 kept in `person-a/legacy/`) |
 | B — rank, basis | working (noise-aware rank + SVD basis) |
 | C — projection, least squares | working |
-| D — PCA | skeleton, to be implemented |
+| D — PCA | working (covariance, eigendecomposition, top-k, comparison) |
 
 ## Important: dataset v2
 The v1 dataset made every sensor channel independent noise, so the matrix was always full rank and the rank/projection steps
