@@ -38,7 +38,8 @@ def main():
     run("Person A: matrix, RREF, LU", "person-a/person_A.py")
     run("Person B: rank, basis, Gram-Schmidt", "person-b/person_B.py")
     run("Person C: projection, least squares, prediction", "person-c/person_C.py")
-    run("Person D: PCA / eigen-analysis (skeleton until implemented)", "person-d/person_D.py")
+    run("Person D: PCA, diagonalization, final comparison", "person-d/person_D.py")
+    print(f"\n{'#' * 70}\n# Pipeline complete (A -> B -> C -> D). Seed: {args.seed}, receivers: {args.n_rx}\n{'#' * 70}")
 
 
 if __name__ == "__main__":
