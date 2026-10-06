@@ -15,7 +15,7 @@ A drone's onboard sensors (GPS x,y,z position + IMU accelerometer/gyro orientati
 
 **Needs:** Python 3.10 or newer and git. Everything else is installed from `requirements.txt` (numpy, scipy, matplotlib).
 No GPU, no display and no other tools are needed — plots are saved as PNG files, no window opens.
-Tested on Linux with Python 3.13; macOS and Windows are expected to work (pure Python + NumPy, no OS-specific code) but have not been run.
+Tested and passing on Linux (x86), macOS (Apple Silicon) and Windows 11/10, all printing the same dataset fingerprint; Python 3.13 and 3.14, NumPy 2.3.5 and 2.5.3.
 
 **1. Get the code**
 ```bash
