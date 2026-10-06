@@ -22,7 +22,8 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 def run(label, script, *args):
     print(f"\n{'#' * 70}\n# {label}\n{'#' * 70}")
     cmd = [sys.executable, os.path.join(ROOT, script), *args]
-    if subprocess.call(cmd, cwd=os.path.dirname(os.path.join(ROOT, script))) != 0:
+    env = dict(os.environ, PYTHONUTF8="1", PYTHONIOENCODING="utf-8")   # Windows-safe output
+    if subprocess.call(cmd, cwd=os.path.dirname(os.path.join(ROOT, script)), env=env) != 0:
         sys.exit(f"{script} failed -- fix it before running the next stage.")
 
 

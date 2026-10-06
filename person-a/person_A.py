@@ -146,6 +146,8 @@ def print_matrix(name, M, precision=5):
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):   # Windows consoles/pipes may default to a legacy codepage
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if not os.path.exists(DATA_FILE):
         raise FileNotFoundError(
             f"{DATA_FILE} not found. Keep person_A.py and uav_sensor_data.csv "

@@ -40,6 +40,7 @@ NOTES FROM THE DATASET FIX (docs/DATASET_FIX.md) — read before choosing what t
 import argparse
 import csv
 import os
+import sys
 
 import matplotlib
 
@@ -116,6 +117,8 @@ def make_figures(*args, **kwargs):
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):   # Windows consoles/pipes may default to a legacy codepage
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description="Person D skeleton: PCA / eigen-analysis")
     ap.add_argument("--data", default=DATA)
     ap.add_argument("--sigma", default=SIGMA)

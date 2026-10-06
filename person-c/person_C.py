@@ -35,6 +35,7 @@ channels). A basis built from IMU channels only spans {1, t} and destroys the po
 import argparse
 import csv
 import os
+import sys
 import re
 
 import matplotlib
@@ -130,6 +131,8 @@ def run_stages(data, Q):
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):   # Windows consoles/pipes may default to a legacy codepage
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description="Person C: projection + least squares + prediction")
     ap.add_argument("--data", default=DEFAULT_DATA)
     ap.add_argument("--basis", default=DEFAULT_BASIS)

@@ -35,6 +35,7 @@ IEEE Trans. Inf. Theory 60(8), 2014 (arXiv:1305.5870);  Marchenko-Pastur edge si
 import argparse
 import csv
 import os
+import sys
 
 import matplotlib
 
@@ -159,6 +160,8 @@ def principal_angle_sine(Q, t):
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):   # Windows consoles/pipes may default to a legacy codepage
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description="Person B: noise-aware rank + orthonormal basis")
     ap.add_argument("--data", default=DEFAULT_DATA)
     ap.add_argument("--sigma", default=DEFAULT_SIGMA)

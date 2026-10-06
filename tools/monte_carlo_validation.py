@@ -69,6 +69,8 @@ def one_seed(seed, n_rx):
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):   # Windows consoles/pipes may default to a legacy codepage
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser()
     ap.add_argument("--seeds", type=int, default=200)
     ap.add_argument("--n-rx", type=int, default=3)
