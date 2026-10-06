@@ -1,5 +1,8 @@
 # Person C — Projection + Least Squares (Aru-h's role)
 
+> **Update (dataset v2):** the dataset and the rank/basis step changed — see [DATASET_FIX.md](DATASET_FIX.md) and [TEAM_CHANGES.md](TEAM_CHANGES.md). Where this document says Gram-Schmidt on independent channels, the code now uses a noise-aware SVD basis (Gram-Schmidt kept as clean-up).
+
+
 See mini-project-overview.md for full project context, the other 3 roles, and the evaluation scheme. This doc is the complete, self-contained scope for Person C — a new chat should need nothing else to pick this up.
 
 ## Task Summary

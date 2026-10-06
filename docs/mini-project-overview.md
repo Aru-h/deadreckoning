@@ -1,5 +1,8 @@
 # UE25MA242A — Mathematical Foundation for AI & Data Science: Mini-Project
 
+> **Update (dataset v2):** the dataset and the rank/basis step changed — see [DATASET_FIX.md](DATASET_FIX.md) and [TEAM_CHANGES.md](TEAM_CHANGES.md). Where this document says Gram-Schmidt on independent channels, the code now uses a noise-aware SVD basis (Gram-Schmidt kept as clean-up).
+
+
 ## Context
 Course: UE25MA242A, Mathematical Foundation for AI & Data Science, PES University (Dept. of CSE). This is a Linear Algebra mini-project. The university handout gave 14 official problem statements (basic matrix ops, image filters, linear systems, football rankings, convolution, norms/movies, interpolation/climate, 3D graphics, Chaos Game, PCA/face recognition, PageRank, clustering, SVD/image compression). **This team built a custom problem statement instead**, not picked from the list — confirm with the professor/TA that custom statements are allowed before final submission, since the handout doesn't explicitly forbid it but doesn't explicitly confirm it either.
 
