@@ -47,7 +47,7 @@ python tools/monte_carlo_validation.py # 200-seed validation of the numbers in d
 It runs A → B → C → D in order (D does PCA / eigen-analysis). Generated files (`*.csv`, `*.png`, `person_*_output.txt`)
 appear next to each script and are git-ignored.
 
-**What a good run looks like:** `Seed: 42`, `Dataset fingerprint: 6ef86ec9fd71` (seed 42, 3 receivers — must match across laptops),
+**What a good run looks like:** `Seed: 42`, `Dataset fingerprint: cfb83d778fae` (seed 42, 3 receivers — must match across laptops),
 `Effective (signal) rank r = 3   [legacy tests said 19]`, `max |Q^T Q - I|` around `1e-16`, and a validation table from Person C
 ending in `projection + average of 3 + least squares  [pipeline]` with errors around 0.01.
 

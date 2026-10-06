@@ -122,7 +122,7 @@ def write_dataset(cols, sigma, csv_path, sigma_path):
         w = csv.writer(f)
         w.writerow(names)
         for i in range(n):
-            w.writerow([repr(float(cols[k][i])) for k in names])
+            w.writerow([format(float(cols[k][i]), ".9g") for k in names])   # 9 significant digits: hides last-bit float differences between CPUs
     with open(sigma_path, "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["channel", "sigma"])
